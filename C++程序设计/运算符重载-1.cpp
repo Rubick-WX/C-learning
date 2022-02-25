@@ -14,14 +14,16 @@ public:
         cout << r << "+" << i << "i" << endl;
     }
     // 在此处补充你的代码
-    Complex operator=(char *);
-    Complex(double real = 0, double imag = 0) : r(real), i(imag) {}
-};
-
-Complex Complex::operator=(char *ptr)
-{
+    Complex(double real=0.0, double imag=0.0);
+    Complex& operator=(const char *);
     
-    double r, i;
+};
+Complex::Complex(double real,double imag):r(real),i(imag){}
+
+Complex& Complex::operator=(const char *ptr)
+{
+
+
     int mid;
     int length = strlen(ptr);
 
@@ -42,20 +44,20 @@ Complex Complex::operator=(char *ptr)
     {
         *(pimag + i - mid - 1) = *(ptr + i);
     }
-    double real = (double)atof(preal);
-    double imag = (double)atof(pimag);
+    r = (double)atof(preal);
+    i = (double)atof(pimag);
     delete[] preal;
     delete[] pimag;
-
-    return Complex(real,imag);
+    return *this;
 }
 
 int main()
 {
-    Complex a;
-    a = "3+4i";
-    a.Print();
+    Complex a,b;
+    b=a = "3+4i";
     
+    b.Print();
+
     a = "5+6i";
     a.Print();
     return 0;
