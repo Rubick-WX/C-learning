@@ -7,7 +7,7 @@ float pickclass(float a[],int k,int left,int right) {
     while (1) {
         while (now<=a[left]&&left<=right) //left遇到小数停下
             left++;
-        while (now > a[right]&&right>left)//right遇到大数停下
+        while (now > a[right]&&left<right)//right遇到大数停下
             right--;
         if (left < right)
             swap(a[left], a[right]);

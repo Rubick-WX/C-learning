@@ -17,32 +17,101 @@ public:
     MyString(string ss){
         s.assign(ss);
     }
+
     MyString(){}
+
     MyString(char ss){
         s[0] = ss;
     }
 
-    MyString(char* ss){
+    MyString(const char* ss){
         for (int i = 0;ss[i]!='\0';i++)
             s.push_back(ss[i]);
-        s.push_back('\0');
+            //结尾不要压入\0，不然\0会占用一个位置，后续打印的时候遇到\0就会停止打印。
     }
 
-    MyString *operator[](int i)
+    
+    char& operator[](int i)
     {
-        return this+i;
+        return this->s[i];
     }
 
-    void operator=(char ss){
-        this->clear();
+   
+
+    MyString operator=(char ss){
+        this->s.clear();
         this->s.push_back(ss);
-
+        return *this;
     }
+    MyString operator=(MyString ss){
+
+        this->s.assign(ss.s);
+        return *this;
+    }
+    MyString operator+(MyString ss){
+        MyString p(*this);
+        p.s.append(ss.s);
+        return p;
+    }
+    MyString operator+(const char *ss){
+        this->s.append(ss);
+        return *this;
+    }
+    MyString operator()(int i,int j){
+        return this->s.substr(i, j);
+    }
+
+    void operator+=(const char * p){
+        this->s.append(p);
+    }
+
+    
+
+    friend ostream& operator<<(ostream &,MyString ss);
+    friend MyString operator+(const char *p, MyString pp);
+    friend bool operator>(MyString a, MyString b);
+    friend bool operator<(MyString a, MyString b);
+    friend bool operator==(MyString a, MyString b);
 };
 
 ///////////////////////定义函数区////////////////////
+ostream& operator<<(ostream &cout, MyString ss){
+        cout << ss.s;
+        return cout;
+    }
 
+MyString operator+(const char* p,MyString pp){
+    MyString ss(p);
+    ss.s.append(pp.s);
+    return ss;
+}
 
+    bool operator>(MyString a,MyString b){
+        for (int i = 0;a[i]!=b[i];i++){
+            if(a[i]>b[i])
+                return true;
+            else
+                return false;
+        }
+    }
+
+    bool operator<(MyString a,MyString b){
+        for (int i = 0;a[i]!=b[i];i++){
+            if(a[i]<b[i])
+                return true;
+            else
+                return false;
+        }
+    }
+
+    bool operator==(MyString a,MyString b){
+        for (int i = 0;a[i]!=b[i];i++){
+            if(a[i]==b[i])
+                return true;
+            else
+                return false;
+        }
+    }
 
 ////////////////////////主函数区/////////////////////
 int CompareString( const void * e1, const void * e2) {
@@ -50,8 +119,9 @@ int CompareString( const void * e1, const void * e2) {
     MyString * s2 = (MyString * ) e2;
     if( *s1 < *s2 ) return -1;
     else if( *s1 == *s2 ) return 0;
-    else if( *s1 > *s2 ) return 1;
+    else if(*s1>*s2)return 1;
 }
+
 int main() {
     MyString s1("abcd-"),s2,s3("efgh-"),s4(s1);
     MyString SArray[4] = {"big","me","about","take"};
